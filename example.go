@@ -1,9 +1,30 @@
 package main
 
-import "github.com/dbzer0/yandex-kassa/api"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/dbzer0/yandex-kassa/api/payment"
+)
 
 func main() {
-	kassa := api.New("", "")
+	//kassa := api.New("", "")
+	payment := payment.Payment{
+		ID:     "1",
+		Status: "ok",
+		Payment: payment.PaymentAmount{
+			Value:    "2",
+			Currency: "RUB",
+		},
+		Description: nil,
+		Recipient: payment.PaymentRecipient{
+			AccountID: "123",
+			GatewayID: "345",
+		},
+		//Requestor: payment.Requestor().Merchant("account123"),
+		Requestor: payment.Requestor().ThirdParty("client123", "client name"),
+	}
 
-
+	p, _ := json.MarshalIndent(payment, "", "\t")
+	fmt.Println(string(p))
 }
