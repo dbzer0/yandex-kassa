@@ -1,0 +1,7 @@
+.idea/
+bin/
+
+# unit tests
+.cover/
+coverage.html
+

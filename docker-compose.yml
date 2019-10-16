@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  unit:
+    container_name: unit
+    build:
+      context: .
+      dockerfile: Dockerfile-unit
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - .:/go/src/github.com/dbzer0/yandex-kassa
+    working_dir: /go/src/github.com/dbzer0/yandex-kassa
+    environment:
+      - UID=1000
+      - GID=1000
