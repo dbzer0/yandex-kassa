@@ -12,12 +12,12 @@ func main() {
 	payment := payment.Payment{
 		ID:     "1",
 		Status: "ok",
-		Payment: payment.PaymentAmount{
+		Payment: payment.PAmount{
 			Value:    "2",
 			Currency: "RUB",
 		},
 		Description: nil,
-		Recipient: payment.PaymentRecipient{
+		Recipient: payment.PRecipient{
 			AccountID: "123",
 			GatewayID: "345",
 		},
