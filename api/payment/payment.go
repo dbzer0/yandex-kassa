@@ -3,7 +3,7 @@ package payment
 type Payment struct {
 	ID          string     `json:"id"`                    // идентификатор платежа в Яндекс.Кассе
 	Status      string     `json:"status"`                // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
-	Payment     PAmount    `json:"amount"`                // сумма платежа
+	Amount      PAmount    `json:"amount"`                // сумма платежа
 	Description *string    `json:"description,omitempty"` // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
 	Recipient   PRecipient `json:"recipient"`             // получатель платежа
 	Requestor   PRequestor `json:"requestor"`             // инициатор платежа или возврата

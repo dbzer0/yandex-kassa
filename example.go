@@ -12,7 +12,7 @@ func main() {
 	payment := payment.Payment{
 		ID:     "1",
 		Status: "ok",
-		Payment: payment.PAmount{
+		Amount: payment.PAmount{
 			Value:    "2",
 			Currency: "RUB",
 		},
