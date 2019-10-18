@@ -8,23 +8,18 @@ import (
 )
 
 func main() {
-	//kassa := api.New("", "")
-	payment := payment.Payment{
-		ID:          "1",
-		Status:      "ok",
-		Amount:      payment.Amount("2", "RUB"),
-		Description: nil,
-		Recipient:   payment.Recipient("123", "345"),
-		Requestor:   payment.Requestor().Merchant("account123"),
-		PaymentMethod: payment.Method().BankCard(&payment.Card{
-			First6:      "123456",
-			Last4:       "7890",
-			ExpiryYear:  "2020",
-			ExpiryMonth: "01",
-			CardType:    "MasterCard",
-		}, false),
+	np := payment.New("2.00", "RUB").
+		WithMethod("bank_card").
+		WithConfirmationRedirect("http://example.com").
+		WithDescription("test payment")
+
+	p, err := np.Create()
+	if err != nil {
+		panic(err)
 	}
 
-	p, _ := json.MarshalIndent(payment, "", "\t")
-	fmt.Println(string(p))
+	data, _ := json.MarshalIndent(np, "", "\t")
+	fmt.Println(string(data))
+
+	fmt.Println(p.Info())
 }
