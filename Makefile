@@ -12,14 +12,13 @@ all	: build
 
 # Builds the project
 build:
-	go build ${LDFLAGS} -o ../bin/${BINARY}
+	go build ${LDFLAGS} -o ./bin/${BINARY}
 
 # Cleans our project: deletes binaries
 clean:
 	if [ -f bin/${BINARY} ] ; then rm bin/${BINARY} ; fi
 	if [ -f coverage.html ] ; then rm coverage.html ; fi
 	docker-compose down --rmi all -v 2>/dev/null || true
-	docker stop api-usermeter 2>/dev/null && docker rm api-usermeter 2>/dev/null || true
 	if [ -d .cover ] ; then rm -rf .cover || true ; fi
 	docker-compose stop >/dev/null
 	docker-compose rm >/dev/null
