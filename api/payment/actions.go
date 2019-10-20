@@ -2,13 +2,17 @@ package payment
 
 func (p *NewPayment) Create() (*Payment, error) {
 	return &Payment{
-		ID:          nil,
-		Status:      nil,
+		ID:          "",
+		Status:      "",
 		Amount:      Amount{},
 		Description: nil,
-		Recipient:   nil,
-		Requestor:   nil,
+		Recipient:   Recipient{},
+		Requestor:   Requestor{},
 		Method:      nil,
+		CreatedAt:   "",
+		Test:        false,
+		Paid:        false,
+		Refundable:  false,
 	}, nil
 }
 

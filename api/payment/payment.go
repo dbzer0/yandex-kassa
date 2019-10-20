@@ -1,13 +1,17 @@
 package payment
 
 type Payment struct {
-	ID          *string    `json:"id,omitempty"`             // идентификатор платежа в Яндекс.Кассе
-	Status      *string    `json:"status,omitempty"`         // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
-	Amount      Amount     `json:"amount"`                   // сумма платежа
-	Description *string    `json:"description,omitempty"`    // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient   *Recipient `json:"recipient,omitempty"`      // получатель платежа
-	Requestor   *Requestor `json:"requestor,omitempty"`      // инициатор платежа или возврата
-	Method      *Method    `json:"payment_method,omitempty"` // способ оплаты, который был использован для платежа
+	ID          string    `json:"id"`                       // идентификатор платежа в Яндекс.Кассе
+	Status      string    `json:"status"`                   // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
+	Amount      Amount    `json:"amount"`                   // сумма платежа
+	Description *string   `json:"description,omitempty"`    // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
+	Recipient   Recipient `json:"recipient"`                // получатель платежа
+	Requestor   Requestor `json:"requestor"`                // инициатор платежа или возврата
+	Method      *Method   `json:"payment_method,omitempty"` // способ оплаты, который был использован для платежа
+	CreatedAt   string    `json:"created_at"`               // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
+	Test        bool      `json:"test"`                     // признак тестовой операции
+	Paid        bool      `json:"paid"`                     // признак оплаты заказа
+	Refundable  bool      `json:"refundable"`               // возможность провести возврат по API
 }
 
 type Amount struct {
