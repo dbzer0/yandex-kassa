@@ -1,17 +1,20 @@
 package payment
 
+import "github.com/dbzer0/yandex-kassa/api/client"
+
 type Payment struct {
-	ID          string    `json:"id"`                       // идентификатор платежа в Яндекс.Кассе
-	Status      string    `json:"status"`                   // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
-	Amount      Amount    `json:"amount"`                   // сумма платежа
-	Description *string   `json:"description,omitempty"`    // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient   Recipient `json:"recipient"`                // получатель платежа
-	Requestor   Requestor `json:"requestor"`                // инициатор платежа или возврата
-	Method      *Method   `json:"payment_method,omitempty"` // способ оплаты, который был использован для платежа
-	CreatedAt   string    `json:"created_at"`               // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
-	Test        bool      `json:"test"`                     // признак тестовой операции
-	Paid        bool      `json:"paid"`                     // признак оплаты заказа
-	Refundable  bool      `json:"refundable"`               // возможность провести возврат по API
+	APIClient   *client.APIClient `json:"-"`
+	ID          string            `json:"id"`                       // идентификатор платежа в Яндекс.Кассе
+	Status      string            `json:"status"`                   // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
+	Amount      Amount            `json:"amount"`                   // сумма платежа
+	Description *string           `json:"description,omitempty"`    // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
+	Recipient   Recipient         `json:"recipient"`                // получатель платежа
+	Requestor   Requestor         `json:"requestor"`                // инициатор платежа или возврата
+	Method      *Method           `json:"payment_method,omitempty"` // способ оплаты, который был использован для платежа
+	CreatedAt   string            `json:"created_at"`               // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
+	Test        bool              `json:"test"`                     // признак тестовой операции
+	Paid        bool              `json:"paid"`                     // признак оплаты заказа
+	Refundable  bool              `json:"refundable"`               // возможность провести возврат по API
 }
 
 type Amount struct {
@@ -29,11 +32,23 @@ type Recipient struct {
 //   * подтверждение платежа;
 //   * отмена платежа;
 func New(paymentID string) *Payment {
-	return &Payment{ID: paymentID}
+	return &Payment{
+		ID: paymentID,
+	}
 }
 
 // Find позволяет получить информацию о текущем состоянии платежа по
 // его уникальному идентификатору.
 func (p *Payment) Find() (*Payment, error) {
+	return p, nil
+}
+
+// Capture подтверждает вашу готовность принять платеж.
+func (p *Payment) Capture() (*Payment, error) {
+	return p, nil
+}
+
+// Cancel отменяет платеж, находящийся в статусе waiting_for_capture.
+func (p *Payment) Cancel() (*Payment, error) {
 	return p, nil
 }

@@ -1,4 +1,4 @@
-package api
+package client
 
 import (
 	"bytes"
@@ -7,13 +7,13 @@ import (
 	"net/http"
 )
 
-// Client определяет транспортный уровень коммуникаций с API.
-type Client struct {
+// APIClient определяет транспортный уровень коммуникаций с API.
+type APIClient struct {
 	HTTP   *http.Client
 	APIURL string
 }
 
-func (c *Client) request(ctx context.Context, method, urlStr string, body *[]byte) (*http.Response, error) {
+func (c *APIClient) request(ctx context.Context, method, urlStr string, body *[]byte) (*http.Response, error) {
 	var request *http.Request
 
 	u := fmt.Sprintf("%s/%s", c.APIURL, urlStr)

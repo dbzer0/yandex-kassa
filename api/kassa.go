@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/dbzer0/yandex-kassa/api/client"
 	"github.com/dbzer0/yandex-kassa/api/payment"
 )
 
@@ -12,7 +13,7 @@ type Kassa struct {
 	AccountID   string
 	SecretKey   string
 	MaxAttempts int
-	client      *Client
+	client      *client.APIClient
 }
 
 // New создает объект для работы с API Яндекс Кассы.
@@ -20,7 +21,7 @@ func New(accountID, secretKey string) *Kassa {
 	return &Kassa{
 		AccountID: accountID,
 		SecretKey: secretKey,
-		client: &Client{
+		client: &client.APIClient{
 			HTTP:   http.DefaultClient,
 			APIURL: apiURL,
 		},
@@ -35,6 +36,7 @@ func (k *Kassa) NewHTTPClient(client *http.Client) {
 // NewPayment создает объект NewPayment. Используется для создания платежа.
 func (k *Kassa) NewPayment(value, currency string) *payment.NewPayment {
 	return &payment.NewPayment{
+		APIClient: k.client,
 		Amount: payment.NewAmount{
 			Value:    value,
 			Currency: currency,
@@ -48,7 +50,8 @@ func (k *Kassa) NewPayment(value, currency string) *payment.NewPayment {
 //   * отмена платежа;
 func (k *Kassa) Payment(paymentID string) *payment.Payment {
 	return &payment.Payment{
-		ID: paymentID,
+		APIClient: k.client,
+		ID:        paymentID,
 	}
 }
 

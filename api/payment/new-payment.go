@@ -1,11 +1,16 @@
 package payment
 
+import (
+	"github.com/dbzer0/yandex-kassa/api/client"
+)
+
 type NewPayment struct {
-	Amount       NewAmount     `json:"amount"`                        // сумма платежа
-	Description  *string       `json:"description,omitempty"`         // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient    *NewRecipient `json:"recipient,omitempty"`           // получатель платежа
-	MethodData   *MethodData   `json:"payment_method_data,omitempty"` // данные для оплаты конкретным способом  (payment_method)
-	Confirmation *Confirmation `json:"confirmation,omitempty"`        // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
+	APIClient    *client.APIClient `json:"-"`
+	Amount       NewAmount         `json:"amount"`                        // сумма платежа
+	Description  *string           `json:"description,omitempty"`         // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
+	Recipient    *NewRecipient     `json:"recipient,omitempty"`           // получатель платежа
+	MethodData   *MethodData       `json:"payment_method_data,omitempty"` // данные для оплаты конкретным способом  (payment_method)
+	Confirmation *Confirmation     `json:"confirmation,omitempty"`        // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
 }
 
 type NewRecipient struct {
@@ -22,6 +27,7 @@ type NewAmount struct {
 // платы (сумму, валюту и статус).
 func (p *NewPayment) Create() (*Payment, error) {
 	return &Payment{
+		APIClient:   p.APIClient,
 		ID:          "",
 		Status:      "",
 		Amount:      Amount{},
