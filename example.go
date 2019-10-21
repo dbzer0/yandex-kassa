@@ -14,7 +14,8 @@ func main() {
 	newPayment := kassa.NewPayment("2.00", "RUB").
 		WithMethod("bank_card").
 		WithConfirmationRedirect("http://example.com").
-		WithDescription("test payment")
+		WithDescription("test payment").
+		WithCapture()
 
 	// создание нового платежа
 	p, err := newPayment.Create()
