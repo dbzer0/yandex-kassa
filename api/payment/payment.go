@@ -23,3 +23,17 @@ type Recipient struct {
 	AccountID *string `json:"account_id,omitempty"` // идентификатор магазина в Яндекс.Кассе
 	GatewayID *string `json:"gateway_id,omitempty"` // идентификатор субаккаунта. Используется для разделения потоков платежей в рамках одного аккаунта
 }
+
+// Payment создает создает объект Payment по которому доступны операции:
+//   * получения информации о платеже;
+//   * подтверждение платежа;
+//   * отмена платежа;
+func New(paymentID string) *Payment {
+	return &Payment{ID: paymentID}
+}
+
+// Find позволяет получить информацию о текущем состоянии платежа по
+// его уникальному идентификатору.
+func (p *Payment) Find() (*Payment, error) {
+	return p, nil
+}

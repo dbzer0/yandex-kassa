@@ -4,22 +4,31 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/dbzer0/yandex-kassa/api/payment"
+	"github.com/dbzer0/yandex-kassa/api"
 )
 
 func main() {
-	np := payment.New("2.00", "RUB").
+	kassa := api.New("MyAccountID", "MySecretKey")
+
+	// формирование объекта платежа
+	newPayment := kassa.NewPayment("2.00", "RUB").
 		WithMethod("bank_card").
 		WithConfirmationRedirect("http://example.com").
 		WithDescription("test payment")
 
-	p, err := np.Create()
+	// создание нового платежа
+	p, err := newPayment.Create()
 	if err != nil {
 		panic(err)
 	}
-
-	data, _ := json.MarshalIndent(np, "", "\t")
+	data, _ := json.MarshalIndent(newPayment, "", "\t")
 	fmt.Println(string(data))
 
-	fmt.Println(p.Info())
+	// получение информации о платеже
+	p, err = p.Find()
+	if err != nil {
+		panic(err)
+	}
+	info, _ := json.MarshalIndent(p, "", "\t")
+	fmt.Println(string(info))
 }
