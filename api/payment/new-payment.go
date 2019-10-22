@@ -1,6 +1,9 @@
 package payment
 
 import (
+	"context"
+	"encoding/json"
+
 	"github.com/dbzer0/yandex-kassa/api/client"
 )
 
@@ -26,19 +29,22 @@ type NewAmount struct {
 
 // Create создает платеж. Он содержит всю необходимую информацию для проведения о
 // платы (сумму, валюту и статус).
-func (p *NewPayment) Create() (*Payment, error) {
-	return &Payment{
-		APIClient:   p.APIClient,
-		ID:          "",
-		Status:      "",
-		Amount:      Amount{},
-		Description: nil,
-		Recipient:   Recipient{},
-		Requestor:   Requestor{},
-		Method:      nil,
-		CreatedAt:   "",
-		Test:        false,
-		Paid:        false,
-		Refundable:  false,
-	}, nil
+func (p *NewPayment) Create(ctx context.Context, idempKey string) (*Payment, error) {
+	body, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	reply, err := p.APIClient.PaymentCreate(ctx, idempKey, &body)
+	if err != nil {
+		return nil, err
+	}
+	defer reply.Close()
+
+	var payment Payment
+	if err := json.NewDecoder(reply).Decode(&payment); err != nil {
+		return nil, err
+	}
+
+	return &payment, nil
 }

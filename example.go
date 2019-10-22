@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/dbzer0/yandex-kassa/api"
 )
 
 func main() {
-	kassa := api.New("MyAccountID", "MySecretKey")
+	secretKey := os.Getenv("YAK_SECRET")
+	shopID := os.Getenv("YAK_SHOPID")
+
+	kassa := api.New(shopID, secretKey)
 
 	// формирование объекта платежа
 	newPayment := kassa.NewPayment("2.00", "RUB").
@@ -18,15 +23,16 @@ func main() {
 		WithCapture()
 
 	// создание нового платежа
-	p, err := newPayment.Create()
+	ctx := context.Background()
+	p, err := newPayment.Create(ctx, "uniq-idempotence-key-3")
 	if err != nil {
 		panic(err)
 	}
-	data, _ := json.MarshalIndent(newPayment, "", "\t")
-	fmt.Println(string(data))
+
+	fmt.Printf("Confirmation URL: %s\n", *p.Confirmation.ConfirmationURL)
 
 	// получение информации о платеже
-	p, err = p.Find()
+	p, err = kassa.Find(ctx, p.ID)
 	if err != nil {
 		panic(err)
 	}

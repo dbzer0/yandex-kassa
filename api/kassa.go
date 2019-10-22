@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/dbzer0/yandex-kassa/api/client"
@@ -10,20 +11,18 @@ import (
 const apiURL = "https://payment.yandex.net/api/v3"
 
 type Kassa struct {
-	AccountID   string
-	SecretKey   string
 	MaxAttempts int
 	client      *client.APIClient
 }
 
 // New создает объект для работы с API Яндекс Кассы.
-func New(accountID, secretKey string) *Kassa {
+func New(shopID, secretKey string) *Kassa {
 	return &Kassa{
-		AccountID: accountID,
-		SecretKey: secretKey,
 		client: &client.APIClient{
 			HTTP:   http.DefaultClient,
 			APIURL: apiURL,
+			ShopID: shopID,
+			Secret: secretKey,
 		},
 	}
 }
@@ -57,6 +56,6 @@ func (k *Kassa) Payment(paymentID string) *payment.Payment {
 
 // Find позволяет получить информацию о текущем состоянии платежа по
 // его уникальному идентификатору.
-func (k *Kassa) Find(paymentID string) (*payment.Payment, error) {
-	return payment.New(paymentID).Find()
+func (k *Kassa) Find(ctx context.Context, paymentID string) (*payment.Payment, error) {
+	return payment.New(k.client, paymentID).Find(ctx)
 }
