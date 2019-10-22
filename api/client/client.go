@@ -15,45 +15,41 @@ type APIClient struct {
 	ShopID, Secret string
 }
 
-func (c *APIClient) requestCloser(ctx context.Context, method, uriStr string, body *[]byte, idempKey *string) (*http.Response, error) {
-	var request *http.Request
-
-	u := fmt.Sprintf("%s/%s", c.APIURL, uriStr)
-
-	var err error
-	if body == nil {
-		request, err = http.NewRequest(method, u, nil)
-	} else {
-		request, err = http.NewRequest(method, u, bytes.NewReader(*body))
-	}
+func (c *APIClient) get(ctx context.Context, uri string) (*http.Response, error) {
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s", c.APIURL, uri), nil)
 	if err != nil {
 		return nil, err
 	}
 
 	request.SetBasicAuth(c.ShopID, c.Secret)
 	request.Header.Add("Content-Type", "application/json")
-	if idempKey != nil {
-		request.Header.Add("Idempotence-Key", *idempKey)
-	}
-
 	return c.HTTP.Do(request.WithContext(ctx))
 }
 
-func (c *APIClient) PaymentCreate(ctx context.Context, idempKey string, body *[]byte) (io.ReadCloser, error) {
-	response, err := c.requestCloser(ctx, http.MethodPost, "payments", body, &idempKey)
+func (c *APIClient) post(ctx context.Context, uri string, idempKey string, body []byte) (*http.Response, error) {
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", c.APIURL, uri), bytes.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
 
+	request.Header.Add("Idempotence-Key", idempKey)
+	request.SetBasicAuth(c.ShopID, c.Secret)
+	request.Header.Add("Content-Type", "application/json")
+	return c.HTTP.Do(request.WithContext(ctx))
+}
+
+func (c *APIClient) Create(ctx context.Context, idempKey string, body *[]byte) (io.ReadCloser, error) {
+	response, err := c.post(ctx, "payments", idempKey, *body)
+	if err != nil {
+		return nil, err
+	}
 	return response.Body, nil
 }
 
-func (c *APIClient) PaymentFind(ctx context.Context, paymentId string, body *[]byte) (io.ReadCloser, error) {
-	uri := fmt.Sprintf("payments/%s", paymentId)
-	response, err := c.requestCloser(ctx, http.MethodGet, uri, body, nil)
+func (c *APIClient) Find(ctx context.Context, paymentId string, body *[]byte) (io.ReadCloser, error) {
+	response, err := c.get(ctx, fmt.Sprintf("payments/%s", paymentId))
 	if err != nil {
 		return nil, err
 	}
-
 	return response.Body, nil
 }

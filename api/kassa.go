@@ -2,9 +2,11 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/dbzer0/yandex-kassa/api/client"
+	"github.com/dbzer0/yandex-kassa/api/info"
 	"github.com/dbzer0/yandex-kassa/api/payment"
 )
 
@@ -36,7 +38,7 @@ func (k *Kassa) NewHTTPClient(client *http.Client) {
 func (k *Kassa) NewPayment(value, currency string) *payment.NewPayment {
 	return &payment.NewPayment{
 		APIClient: k.client,
-		Amount: payment.NewAmount{
+		Amount: payment.Amount{
 			Value:    value,
 			Currency: currency,
 		},
@@ -47,8 +49,8 @@ func (k *Kassa) NewPayment(value, currency string) *payment.NewPayment {
 //   * получения информации о платеже;
 //   * подтверждение платежа;
 //   * отмена платежа;
-func (k *Kassa) Payment(paymentID string) *payment.Payment {
-	return &payment.Payment{
+func (k *Kassa) Payment(paymentID string) *info.Payment {
+	return &info.Payment{
 		APIClient: k.client,
 		ID:        paymentID,
 	}
@@ -56,6 +58,31 @@ func (k *Kassa) Payment(paymentID string) *payment.Payment {
 
 // Find позволяет получить информацию о текущем состоянии платежа по
 // его уникальному идентификатору.
-func (k *Kassa) Find(ctx context.Context, paymentID string) (*payment.Payment, error) {
-	return payment.New(k.client, paymentID).Find(ctx)
+func (k *Kassa) Find(ctx context.Context, paymentID string) (*info.Payment, error) {
+	p := &info.Payment{
+		ID:        paymentID,
+		APIClient: k.client,
+	}
+
+	reply, err := p.APIClient.Find(ctx, p.ID, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer reply.Close()
+
+	if err := json.NewDecoder(reply).Decode(&p); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
+
+// Capture подтверждает вашу готовность принять платеж.
+func (k *Kassa) Capture(ctx context.Context, paymentID string) (*info.Payment, error) {
+	return nil, nil
+}
+
+// Cancel отменяет платеж, находящийся в статусе waiting_for_capture.
+func (k *Kassa) Cancel(ctx context.Context, paymentID string) (*info.Payment, error) {
+	return nil, nil
 }

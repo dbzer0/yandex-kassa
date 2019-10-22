@@ -29,7 +29,9 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("Confirmation URL: %s\n", *p.Confirmation.ConfirmationURL)
+	if p.Confirmation != nil && p.Confirmation.ConfirmationURL != nil {
+		fmt.Printf("Confirmation URL: %s\n", *p.Confirmation.ConfirmationURL)
+	}
 
 	// получение информации о платеже
 	p, err = kassa.Find(ctx, p.ID)
