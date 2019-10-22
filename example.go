@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/dbzer0/yandex-kassa/api"
+	"github.com/google/uuid"
 )
 
 func main() {
@@ -22,9 +23,15 @@ func main() {
 		WithDescription("test payment").
 		WithCapture()
 
+	// генерация ключа идемпотентности
+	id, err := uuid.NewUUID()
+	if err != nil {
+		panic(err)
+	}
+
 	// создание нового платежа
 	ctx := context.Background()
-	p, err := newPayment.Create(ctx, "uniq-idempotence-key-3")
+	p, err := newPayment.Create(ctx, id.String())
 	if err != nil {
 		panic(err)
 	}
