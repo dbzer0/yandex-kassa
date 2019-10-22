@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+const ua = "yandex-kassa-go-api/1.0"
+
 // APIClient определяет транспортный уровень коммуникаций с API.
 type APIClient struct {
 	HTTP           *http.Client
@@ -23,6 +25,8 @@ func (c *APIClient) get(ctx context.Context, uri string) (*http.Response, error)
 
 	request.SetBasicAuth(c.ShopID, c.Secret)
 	request.Header.Add("Content-Type", "application/json")
+	request.Header.Set("User-Agent", ua)
+
 	return c.HTTP.Do(request.WithContext(ctx))
 }
 
@@ -35,6 +39,8 @@ func (c *APIClient) post(ctx context.Context, uri string, idempKey string, body 
 	request.Header.Add("Idempotence-Key", idempKey)
 	request.SetBasicAuth(c.ShopID, c.Secret)
 	request.Header.Add("Content-Type", "application/json")
+	request.Header.Set("User-Agent", ua)
+
 	return c.HTTP.Do(request.WithContext(ctx))
 }
 

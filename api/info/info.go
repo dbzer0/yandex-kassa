@@ -5,19 +5,22 @@ import (
 )
 
 type Payment struct {
-	APIClient    *client.APIClient `json:"-"`
-	ID           string            `json:"id"`                       // идентификатор платежа в Яндекс.Кассе
-	Status       string            `json:"status"`                   // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
-	Amount       Amount            `json:"amount"`                   // сумма платежа
-	Description  *string           `json:"description,omitempty"`    // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient    Recipient         `json:"recipient"`                // получатель платежа
-	Requestor    Requestor         `json:"requestor"`                // инициатор платежа или возврата
-	Method       *Method           `json:"payment_method,omitempty"` // способ оплаты, который был использован для платежа
-	CreatedAt    string            `json:"created_at"`               // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
-	Test         bool              `json:"test"`                     // признак тестовой операции
-	Paid         bool              `json:"paid"`                     // признак оплаты заказа
-	Refundable   bool              `json:"refundable"`               // возможность провести возврат по API
-	Confirmation *Confirmation     `json:"confirmation,omitempty"`   // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
+	APIClient            *client.APIClient     `json:"-"`
+	ID                   string                `json:"id"`                              // идентификатор платежа в Яндекс.Кассе
+	Status               string                `json:"status"`                          // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
+	Amount               Amount                `json:"amount"`                          // сумма платежа
+	RefundedAmount       *RefundedAmount       `json:"refunded_amount,omitempty"`       // сумма, которая вернулась пользователю
+	Description          *string               `json:"description,omitempty"`           // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
+	Recipient            Recipient             `json:"recipient"`                       // получатель платежа
+	Requestor            Requestor             `json:"requestor"`                       // инициатор платежа или возврата
+	Method               *Method               `json:"payment_method,omitempty"`        // способ оплаты, который был использован для платежа
+	CreatedAt            string                `json:"created_at"`                      // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
+	CapturedAt           *string               `json:"captured_at,omitempty"`           // время подтверждения платежа
+	Confirmation         *Confirmation         `json:"confirmation,omitempty"`          // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
+	AuthorizationDetails *AuthorizationDetails `json:"authorization_details,omitempty"` // данные об авторизации платежа
+	Refundable           bool                  `json:"refundable"`                      // возможность провести возврат по API
+	Paid                 bool                  `json:"paid"`                            // признак оплаты заказа
+	Test                 bool                  `json:"test"`                            // признак тестовой операции
 }
 
 type Amount struct {
@@ -90,4 +93,14 @@ type Confirmation struct {
 	Type            string  `json:"type"`                       // код сценария подтверждения
 	ReturnURL       *string `json:"return_url,omitempty"`       // URL, на который вернется пользователь после подтверждения или отмены платежа
 	ConfirmationURL *string `json:"confirmation_url,omitempty"` // url на который необходимо перенаправить пользователя для подтверждения оплаты
+}
+
+type AuthorizationDetails struct {
+	RRN      string `json:"rrn,omitempty"`       // уникальный идентификатор транзакции в системе эмитента
+	AuthCode string `json:"auth_code,omitempty"` // код авторизации банковской карты
+}
+
+type RefundedAmount struct {
+	Value    string `json:"value"`    // сумма в выбранной валюте
+	Currency string `json:"currency"` // код валюты в формате ISO-4217
 }
