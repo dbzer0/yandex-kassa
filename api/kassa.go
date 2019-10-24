@@ -12,6 +12,7 @@ import (
 )
 
 const apiURL = "https://payment.yandex.net/api/v3"
+const typeError = "error"
 
 type Kassa struct {
 	MaxAttempts int
@@ -31,8 +32,8 @@ func New(shopID, secretKey string) *Kassa {
 }
 
 // NewHTTPClient перезаписывает http клиент, определенный по-умолчанию.
-func (k *Kassa) NewHTTPClient(client *http.Client) {
-	k.client.HTTP = client
+func (k *Kassa) NewHTTPClient(c *http.Client) {
+	k.client.HTTP = c
 }
 
 // NewPayment создает объект NewPayment. Используется для создания платежа.
@@ -75,7 +76,7 @@ func (k *Kassa) Find(ctx context.Context, paymentID string) (*info.Payment, erro
 		return nil, err
 	}
 
-	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+	if p != nil && p.Type != nil && *p.Type == typeError && p.Description != nil {
 		return p, errors.New(*p.Description)
 	}
 
@@ -108,7 +109,7 @@ func (k *Kassa) Capture(ctx context.Context, idempKey, paymentID, value, currenc
 		return nil, err
 	}
 
-	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+	if p != nil && p.Type != nil && *p.Type == typeError && p.Description != nil {
 		return p, errors.New(*p.Description)
 	}
 
@@ -132,7 +133,7 @@ func (k *Kassa) Cancel(ctx context.Context, idempKey, paymentID string) (*info.P
 		return nil, err
 	}
 
-	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+	if p != nil && p.Type != nil && *p.Type == typeError && p.Description != nil {
 		return p, errors.New(*p.Description)
 	}
 

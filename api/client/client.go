@@ -33,7 +33,7 @@ func (c *APIClient) get(ctx context.Context, uri string) (*http.Response, error)
 	return c.HTTP.Do(request.WithContext(ctx))
 }
 
-func (c *APIClient) post(ctx context.Context, uri string, idempKey string, body []byte) (*http.Response, error) {
+func (c *APIClient) post(ctx context.Context, uri, idempKey string, body []byte) (*http.Response, error) {
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/%s", c.APIURL, uri), bytes.NewReader(body))
 	if err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func (c *APIClient) Create(ctx context.Context, idempKey string, body *[]byte) (
 	return response.Body, nil
 }
 
-func (c *APIClient) Find(ctx context.Context, paymentId string) (io.ReadCloser, error) {
-	response, err := c.get(ctx, fmt.Sprintf("payments/%s", paymentId))
+func (c *APIClient) Find(ctx context.Context, paymentID string) (io.ReadCloser, error) {
+	response, err := c.get(ctx, fmt.Sprintf("payments/%s", paymentID))
 	if err != nil {
 		return nil, err
 	}
@@ -69,16 +69,16 @@ func (c *APIClient) Find(ctx context.Context, paymentId string) (io.ReadCloser, 
 	return response.Body, nil
 }
 
-func (c *APIClient) Cancel(ctx context.Context, idempKey string, paymentId string) (io.ReadCloser, error) {
-	response, err := c.post(ctx, fmt.Sprintf("payments/%s/cancel", paymentId), idempKey, []byte("{}"))
+func (c *APIClient) Cancel(ctx context.Context, idempKey, paymentID string) (io.ReadCloser, error) {
+	response, err := c.post(ctx, fmt.Sprintf("payments/%s/cancel", paymentID), idempKey, []byte("{}"))
 	if err != nil {
 		return nil, err
 	}
 	return response.Body, nil
 }
 
-func (c *APIClient) Capture(ctx context.Context, idempKey string, paymentId string, body *[]byte) (io.ReadCloser, error) {
-	response, err := c.post(ctx, fmt.Sprintf("payments/%s/capture", paymentId), idempKey, *body)
+func (c *APIClient) Capture(ctx context.Context, idempKey, paymentID string, body *[]byte) (io.ReadCloser, error) {
+	response, err := c.post(ctx, fmt.Sprintf("payments/%s/capture", paymentID), idempKey, *body)
 	if err != nil {
 		return nil, err
 	}
