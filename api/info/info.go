@@ -7,20 +7,24 @@ import (
 type Payment struct {
 	APIClient            *client.APIClient     `json:"-"`
 	ID                   string                `json:"id"`                              // идентификатор платежа в Яндекс.Кассе
-	Status               string                `json:"status"`                          // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
-	Amount               Amount                `json:"amount"`                          // сумма платежа
+	Status               *string               `json:"status,omitempty"`                // статус платежа. Возможные значения: pending, waiting_for_capture, succeeded и canceled
+	Amount               *Amount               `json:"amount,omitempty"`                // сумма платежа
 	RefundedAmount       *RefundedAmount       `json:"refunded_amount,omitempty"`       // сумма, которая вернулась пользователю
 	Description          *string               `json:"description,omitempty"`           // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient            Recipient             `json:"recipient"`                       // получатель платежа
-	Requestor            Requestor             `json:"requestor"`                       // инициатор платежа или возврата
+	Recipient            *Recipient            `json:"recipient,omitempty"`             // получатель платежа
+	Requestor            *Requestor            `json:"requestor,omitempty"`             // инициатор платежа или возврата
 	Method               *Method               `json:"payment_method,omitempty"`        // способ оплаты, который был использован для платежа
-	CreatedAt            string                `json:"created_at"`                      // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
+	CreatedAt            *string               `json:"created_at,omitempty"`            // время создания заказа в формате ISO 8601. Пример: 2017-11-03T11:52:31.827Z
 	CapturedAt           *string               `json:"captured_at,omitempty"`           // время подтверждения платежа
 	Confirmation         *Confirmation         `json:"confirmation,omitempty"`          // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
 	AuthorizationDetails *AuthorizationDetails `json:"authorization_details,omitempty"` // данные об авторизации платежа
-	Refundable           bool                  `json:"refundable"`                      // возможность провести возврат по API
-	Paid                 bool                  `json:"paid"`                            // признак оплаты заказа
-	Test                 bool                  `json:"test"`                            // признак тестовой операции
+	Refundable           *bool                 `json:"refundable,omitempty"`            // возможность провести возврат по API
+	Paid                 *bool                 `json:"paid,omitempty"`                  // признак оплаты заказа
+	Test                 *bool                 `json:"test,omitempty"`                  // признак тестовой операции
+
+	Code      *string `json:"code,omitempty"`      // содержит ID ошибки, например invalid_request
+	Parameter *string `json:"parameter,omitempty"` // содержит параметр в котором произошла ошибка, например: payment_id
+	Type      *string `json:"type,omitempty"`      // содержит признак ошибки, например: error
 }
 
 type Amount struct {

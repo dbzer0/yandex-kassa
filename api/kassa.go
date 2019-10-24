@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/dbzer0/yandex-kassa/api/client"
@@ -64,7 +65,7 @@ func (k *Kassa) Find(ctx context.Context, paymentID string) (*info.Payment, erro
 		APIClient: k.client,
 	}
 
-	reply, err := p.APIClient.Find(ctx, p.ID, nil)
+	reply, err := p.APIClient.Find(ctx, p.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -72,6 +73,10 @@ func (k *Kassa) Find(ctx context.Context, paymentID string) (*info.Payment, erro
 
 	if err := json.NewDecoder(reply).Decode(&p); err != nil {
 		return nil, err
+	}
+
+	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+		return p, errors.New(*p.Description)
 	}
 
 	return p, nil
@@ -83,6 +88,25 @@ func (k *Kassa) Capture(ctx context.Context, paymentID string) (*info.Payment, e
 }
 
 // Cancel отменяет платеж, находящийся в статусе waiting_for_capture.
-func (k *Kassa) Cancel(ctx context.Context, paymentID string) (*info.Payment, error) {
-	return nil, nil
+func (k *Kassa) Cancel(ctx context.Context, idempKey, paymentID string) (*info.Payment, error) {
+	p := &info.Payment{
+		ID:        paymentID,
+		APIClient: k.client,
+	}
+
+	reply, err := p.APIClient.Cancel(ctx, idempKey, paymentID)
+	if err != nil {
+		return nil, err
+	}
+	defer reply.Close()
+
+	if err := json.NewDecoder(reply).Decode(&p); err != nil {
+		return nil, err
+	}
+
+	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+		return p, errors.New(*p.Description)
+	}
+
+	return p, nil
 }
