@@ -76,3 +76,11 @@ func (c *APIClient) Cancel(ctx context.Context, idempKey string, paymentId strin
 	}
 	return response.Body, nil
 }
+
+func (c *APIClient) Capture(ctx context.Context, idempKey string, paymentId string, body *[]byte) (io.ReadCloser, error) {
+	response, err := c.post(ctx, fmt.Sprintf("payments/%s/capture", paymentId), idempKey, *body)
+	if err != nil {
+		return nil, err
+	}
+	return response.Body, nil
+}

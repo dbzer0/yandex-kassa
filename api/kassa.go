@@ -83,8 +83,36 @@ func (k *Kassa) Find(ctx context.Context, paymentID string) (*info.Payment, erro
 }
 
 // Capture подтверждает вашу готовность принять платеж.
-func (k *Kassa) Capture(ctx context.Context, paymentID string) (*info.Payment, error) {
-	return nil, nil
+func (k *Kassa) Capture(ctx context.Context, idempKey, paymentID, value, currency string) (*info.Payment, error) {
+	p := &info.Payment{
+		ID:        paymentID,
+		APIClient: k.client,
+		Amount: &info.Amount{
+			Value:    value,
+			Currency: currency,
+		},
+	}
+
+	body, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	reply, err := p.APIClient.Capture(ctx, idempKey, paymentID, &body)
+	if err != nil {
+		return nil, err
+	}
+	defer reply.Close()
+
+	if err := json.NewDecoder(reply).Decode(&p); err != nil {
+		return nil, err
+	}
+
+	if p != nil && p.Type != nil && *p.Type == "error" && p.Description != nil {
+		return p, errors.New(*p.Description)
+	}
+
+	return p, nil
 }
 
 // Cancel отменяет платеж, находящийся в статусе waiting_for_capture.
