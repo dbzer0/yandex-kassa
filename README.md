@@ -10,7 +10,7 @@ kassa := api.New("myShopID", "mySecretKey")
 
 // формирование объекта платежа
 newPayment := kassa.NewPayment("2.00", currency.RUB).
-    WithMethod("bank_card").
+    WithMethodBankCard().
     WithConfirmationRedirect("http://example.com").
     WithDescription("test payment").
     WithCapture()

@@ -3,15 +3,12 @@ package client
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 )
 
 const ua = "yandex-kassa-go-api/1.0"
-
-var ErrInvalidRequest = errors.New("invalid request")
 
 // APIClient определяет транспортный уровень коммуникаций с API.
 type APIClient struct {
@@ -53,7 +50,8 @@ func (c *APIClient) Create(ctx context.Context, idempKey string, body *[]byte) (
 		return nil, err
 	}
 	if response.StatusCode != http.StatusOK {
-		return response.Body, ErrInvalidRequest
+		defer response.Body.Close()
+		return nil, c.errorWrap(response.Body)
 	}
 	return response.Body, nil
 }
@@ -64,7 +62,8 @@ func (c *APIClient) Find(ctx context.Context, paymentID string) (io.ReadCloser, 
 		return nil, err
 	}
 	if response.StatusCode != http.StatusOK {
-		return response.Body, ErrInvalidRequest
+		defer response.Body.Close()
+		return nil, c.errorWrap(response.Body)
 	}
 	return response.Body, nil
 }

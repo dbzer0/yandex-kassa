@@ -7,6 +7,16 @@ import (
 	"github.com/dbzer0/yandex-kassa/api/info"
 )
 
+const (
+	methodBankCard    = "bank_card"
+	methodApplePay    = "apple_pay"
+	methodGooglePay   = "google_pay"
+	methodYandexMoney = "yandex_money"
+	methodSberBank    = "sberbank"
+	methodAlfaBank    = "alfabank"
+	methodTinkoffBank = "tinkoff_bank"
+)
+
 // Create создает платеж. Он содержит всю необходимую информацию для проведения о
 // платы (сумму, валюту и статус).
 func (p *NewPayment) Create(ctx context.Context, idempKey string) (*info.Payment, error) {
@@ -27,6 +37,34 @@ func (p *NewPayment) Create(ctx context.Context, idempKey string) (*info.Payment
 	}
 
 	return &payment, nil
+}
+
+func (p *NewPayment) WithMethodBankCard() *NewPayment {
+	return p.WithMethod(methodBankCard)
+}
+
+func (p *NewPayment) WithMethodApplePay() *NewPayment {
+	return p.WithMethod(methodApplePay)
+}
+
+func (p *NewPayment) WithMethodGooglePay() *NewPayment {
+	return p.WithMethod(methodGooglePay)
+}
+
+func (p *NewPayment) WithMethodYandexMoney() *NewPayment {
+	return p.WithMethod(methodYandexMoney)
+}
+
+func (p *NewPayment) WithMethodSberBank() *NewPayment {
+	return p.WithMethod(methodSberBank)
+}
+
+func (p *NewPayment) WithMethodAlfaBank() *NewPayment {
+	return p.WithMethod(methodAlfaBank)
+}
+
+func (p *NewPayment) WithMethodTinkoffBank() *NewPayment {
+	return p.WithMethod(methodTinkoffBank)
 }
 
 func (p *NewPayment) WithMethod(method string) *NewPayment {
