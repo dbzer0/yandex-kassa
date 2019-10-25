@@ -108,3 +108,12 @@ type RefundedAmount struct {
 	Value    string `json:"value"`    // сумма в выбранной валюте
 	Currency string `json:"currency"` // код валюты в формате ISO-4217
 }
+
+// ConfirmationURL возвращает URL (если он есть), на который вернется
+// пользователь после подтверждения или отмены платежа.
+func (p *Payment) ConfirmationURL() *string {
+	if p.Confirmation == nil {
+		return nil
+	}
+	return p.Confirmation.ConfirmationURL
+}

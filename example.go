@@ -37,8 +37,9 @@ func main() {
 		panic(err)
 	}
 
-	if p.Confirmation != nil && p.Confirmation.ConfirmationURL != nil {
-		fmt.Printf("Confirmation URL: %s\n", *p.Confirmation.ConfirmationURL)
+	// получение URL для подтверждения или отмены платежа пользователем
+	if p.ConfirmationURL() != nil {
+		fmt.Printf("Confirmation URL: %s\n", *p.ConfirmationURL())
 	}
 
 	// получение информации о платеже

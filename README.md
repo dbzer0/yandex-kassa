@@ -10,24 +10,27 @@ kassa := api.New("myShopID", "mySecretKey")
 
 // формирование объекта платежа
 newPayment := kassa.NewPayment("2.00", currency.RUB).
-    WithMethodBankCard().
-    WithConfirmationRedirect("http://example.com").
-    WithDescription("test payment").
-    WithCapture()
+	WithMethodBankCard().
+	WithConfirmationRedirect("http://example.com").
+	WithDescription("test payment").
+	WithCapture()
 
 // генерация ключа идемпотентности
 // import "github.com/google/uuid"
 id, _ := uuid.NewUUID()
 
 // создание платежа в Яндекс.Касса
-np, err := newPayment.Create(context.Background(), id.String())
+p, err := newPayment.Create(context.Background(), id.String())
 if err != nil {
-    // обработка ошибки
+	// обработка ошибки
 }
 
+// получение URL для подтверждения или отмены платежа пользователем
+fmt.Printf("Confirmation URL: %s\n", *p.ConfirmationURL())
+
 // получение информации о платеже
-p, err = kassa.Find(context.Background(), np.ID)
+p, err = kassa.Find(context.Background(), p.ID)
 if err != nil {
-    // обработка ошибки
+	// обработка ошибки
 }
 ```
