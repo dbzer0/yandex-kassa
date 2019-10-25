@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/dbzer0/yandex-kassa/api"
+	"github.com/dbzer0/yandex-kassa/api/currency"
 	"github.com/google/uuid"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	kassa := api.New(shopID, secretKey)
 
 	// формирование объекта платежа
-	newPayment := kassa.NewPayment("2.00", "RUB").
+	newPayment := kassa.NewPayment("2.00", currency.RUB).
 		WithMethod("bank_card").
 		WithConfirmationRedirect("http://example.com").
 		WithDescription("test payment").
