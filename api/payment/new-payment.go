@@ -5,30 +5,30 @@ import (
 )
 
 type NewPayment struct {
-	APIClient    *client.APIClient `json:"-"`
-	Amount       Amount            `json:"amount"`                        // сумма платежа
-	Description  *string           `json:"description,omitempty"`         // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
-	Recipient    *Recipient        `json:"recipient,omitempty"`           // получатель платежа
-	MethodData   *MethodData       `json:"payment_method_data,omitempty"` // данные для оплаты конкретным способом  (payment_method)
-	Confirmation *Confirmation     `json:"confirmation,omitempty"`        // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
-	Capture      *bool             `json:"capture,omitempty"`             // автоматический прием  поступившего платежа
+	APIClient    *client.APIClient `json:"-" bson:"-"`
+	Amount       Amount            `json:"amount" bson:"amount"`                                               // сумма платежа
+	Description  *string           `json:"description,omitempty" bson:"description,omitempty"`                 // описание транзакции (не более 128 символов), которое вы увидите в личном кабинете Яндекс.Кассы
+	Recipient    *Recipient        `json:"recipient,omitempty" bson:"recipient,omitempty"`                     // получатель платежа
+	MethodData   *MethodData       `json:"payment_method_data,omitempty" bson:"payment_method_data,omitempty"` // данные для оплаты конкретным способом  (payment_method)
+	Confirmation *Confirmation     `json:"confirmation,omitempty" bson:"confirmation,omitempty"`               // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
+	Capture      *bool             `json:"capture,omitempty" bson:"capture,omitempty"`                         // автоматический прием  поступившего платежа
 }
 
 type Recipient struct {
-	AccountID *string `json:"account_id,omitempty"` // идентификатор магазина в Яндекс.Кассе
-	GatewayID *string `json:"gateway_id,omitempty"` // идентификатор субаккаунта. Используется для разделения потоков платежей в рамках одного аккаунта
+	AccountID *string `json:"account_id,omitempty" bson:"account_id,omitempty"` // идентификатор магазина в Яндекс.Кассе
+	GatewayID *string `json:"gateway_id,omitempty" bson:"gateway_id,omitempty"` // идентификатор субаккаунта. Используется для разделения потоков платежей в рамках одного аккаунта
 }
 
 type Amount struct {
-	Value    string `json:"value"`    // сумма в выбранной валюте. Выражается в виде строки и пишется через точку
-	Currency string `json:"currency"` // код валюты в формате ISO-4217
+	Value    string `json:"value" bson:"value"`       // сумма в выбранной валюте. Выражается в виде строки и пишется через точку
+	Currency string `json:"currency" bson:"currency"` // код валюты в формате ISO-4217
 }
 
 type Confirmation struct {
-	Type      string  `json:"type"`                 // код сценария подтверждения
-	ReturnURL *string `json:"return_url,omitempty"` // URL, на который вернется пользователь после подтверждения или отмены платежа
+	Type      string  `json:"type" bson:"type"`                                 // код сценария подтверждения
+	ReturnURL *string `json:"return_url,omitempty" bson:"return_url,omitempty"` // URL, на который вернется пользователь после подтверждения или отмены платежа
 }
 
 type MethodData struct {
-	Type string `json:"type"` // код способа оплаты
+	Type string `json:"type" bson:"type"` // код способа оплаты
 }
