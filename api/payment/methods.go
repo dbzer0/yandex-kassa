@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/dbzer0/yandex-kassa/api/info"
+	"github.com/GiddeonWyeth/yandex-kassa/api/info"
 )
 
 const (
@@ -102,10 +102,10 @@ func (p *NewPayment) WithReceipt(phone string) *NewPayment {
 		PaymentMode:    "full_prepayment",
 		PaymentSubject: "service",
 	}}
-	customer := ReceiptCustomer{Phone:phone}
+	customer := ReceiptCustomer{Phone: phone}
 	p.Receipt = &Receipt{
 		Customer: customer,
-		Items: items,
+		Items:    items,
 	}
 	return p
 }

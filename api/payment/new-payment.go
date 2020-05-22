@@ -1,7 +1,7 @@
 package payment
 
 import (
-	"github.com/dbzer0/yandex-kassa/api/client"
+	"github.com/GiddeonWyeth/yandex-kassa/api/client"
 )
 
 type NewPayment struct {
@@ -35,7 +35,7 @@ type MethodData struct {
 
 type Receipt struct {
 	Customer ReceiptCustomer `json:"customer"`
-	Items [1]ReceiptItem `json:"items"`
+	Items    [1]ReceiptItem  `json:"items"`
 }
 
 type ReceiptCustomer struct {
