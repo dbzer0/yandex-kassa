@@ -32,3 +32,21 @@ type Confirmation struct {
 type MethodData struct {
 	Type string `json:"type" bson:"type"` // код способа оплаты
 }
+
+type Receipt struct {
+	Customer ReceiptCustomer `json:"customer"`
+	Items [1]ReceiptItem `json:"items"`
+}
+
+type ReceiptCustomer struct {
+	Phone string `json:"phone"`
+}
+
+type ReceiptItem struct {
+	Description    string `json:"description"`
+	Quantity       string `json:"quantity"`
+	Amount         Amount `json:"amount"`
+	VatCode        string `json:"vat_code"`
+	PaymentMode    string `json:"payment_mode"`
+	PaymentSubject string `json:"payment_subject"`
+}
