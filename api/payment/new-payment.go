@@ -12,6 +12,7 @@ type NewPayment struct {
 	MethodData   *MethodData       `json:"payment_method_data,omitempty" bson:"payment_method_data,omitempty"` // данные для оплаты конкретным способом  (payment_method)
 	Confirmation *Confirmation     `json:"confirmation,omitempty" bson:"confirmation,omitempty"`               // данные, необходимые для инициации выбранного сценария подтверждения платежа пользователем
 	Capture      *bool             `json:"capture,omitempty" bson:"capture,omitempty"`                         // автоматический прием  поступившего платежа
+	Receipt      *Receipt          `json:"receipt,omitempty" bson:"receipt,omitempty"`
 }
 
 type Recipient struct {
