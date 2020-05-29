@@ -40,7 +40,7 @@ type Receipt struct {
 }
 
 type ReceiptCustomer struct {
-	Phone string `json:"phone"`
+	Email string `json:"email"`
 }
 
 type ReceiptItem struct {

@@ -93,7 +93,7 @@ func (p *NewPayment) WithDescription(desc string) *NewPayment {
 	return p
 }
 
-func (p *NewPayment) WithReceipt(phone string) *NewPayment {
+func (p *NewPayment) WithReceipt(email string) *NewPayment {
 	items := [1]ReceiptItem{{
 		Description:    "Курс",
 		Quantity:       "1.00",
@@ -102,7 +102,7 @@ func (p *NewPayment) WithReceipt(phone string) *NewPayment {
 		PaymentMode:    "full_prepayment",
 		PaymentSubject: "service",
 	}}
-	customer := ReceiptCustomer{Phone: phone}
+	customer := ReceiptCustomer{Email: email}
 	p.Receipt = &Receipt{
 		Customer: customer,
 		Items:    items,
