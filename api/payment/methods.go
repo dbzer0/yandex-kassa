@@ -98,7 +98,7 @@ func (p *NewPayment) WithReceipt(email string) *NewPayment {
 		Description:    "Курс",
 		Quantity:       "1.00",
 		Amount:         p.Amount,
-		VatCode:        "4",
+		VatCode:        "1",
 		PaymentMode:    "full_prepayment",
 		PaymentSubject: "service",
 	}}
