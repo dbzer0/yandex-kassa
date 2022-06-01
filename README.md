@@ -1,7 +1,6 @@
 # Yandex.Checkout API Go Client Library (Яндекс.Касса, Yandex.Checkout)
 
-Клиент для работы с платежами по [API Яндекс.Кассы](https://kassa.yandex.ru/developers/api?lang=bash)
-Подходит тем, у кого способ подключения к Яндекс.Кассе называется API.
+Клиент для работы с платежами по [API Yoo Money](https://yoomoney.ru/docs/wallet) (ранее [API Яндекс.Кассы](https://kassa.yandex.ru/developers/api?lang=bash))
 
 ## Пример создания платежа
 

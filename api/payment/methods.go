@@ -11,7 +11,7 @@ const (
 	methodBankCard    = "bank_card"
 	methodApplePay    = "apple_pay"
 	methodGooglePay   = "google_pay"
-	methodYandexMoney = "yandex_money"
+	methodYooMoney    = "yoo_money"
 	methodSberBank    = "sberbank"
 	methodAlfaBank    = "alfabank"
 	methodTinkoffBank = "tinkoff_bank"
@@ -52,7 +52,7 @@ func (p *NewPayment) WithMethodGooglePay() *NewPayment {
 }
 
 func (p *NewPayment) WithMethodYandexMoney() *NewPayment {
-	return p.WithMethod(methodYandexMoney)
+	return p.WithMethod(methodYooMoney)
 }
 
 func (p *NewPayment) WithMethodSberBank() *NewPayment {
